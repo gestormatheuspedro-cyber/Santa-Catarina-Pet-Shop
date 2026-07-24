@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  
+  --color-primary: #e05a26;
+  --color-primary-light: #e8714a;
+  --color-primary-dark: #c94c1d;
+  --color-primary-50: rgba(224,90,38,0.08);
+  --color-primary-100: rgba(224,90,38,0.15);
+  
+  --color-secondary: #c98a55;
+  --color-green-brand: #25D366;
+  --color-green-brand-dark: #1ebe57;
+  --color-bg-base: #FFFFFF;
+  --color-bg-soft: #F8F9FA;
+  --color-text-base: #1A1A2E;
+  --color-text-secondary: #4A5568;
+  --color-text-muted: #9CA3AF;
+  --color-border-light: #E5E7EB;
+  
+  /* Custom Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-primary: 0 10px 25px -5px rgba(224, 90, 38, 0.25);
+  --shadow-primary-lg: 0 20px 35px -10px rgba(224, 90, 38, 0.35);
+  
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Custom Animations */
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes marquee-reverse {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes zoom-slow {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+  }
+  @keyframes dog-wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-8deg); }
+    75% { transform: rotate(8deg); }
+  }
+  
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 40s linear infinite;
+  --animate-zoom-slow: zoom-slow 20s ease-in-out infinite alternate;
+  --animate-dog-wiggle: dog-wiggle 1.5s ease-in-out infinite;
+}
+
+/* Custom Scroll Behavior and Global Styles */
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  color: var(--color-text-base);
+  background-color: var(--color-bg-base);
+}
+
+/* Responsive typography clamp implementations */
+.clamp-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 1.5rem + 2.5vw, 3.75rem);
+  line-height: 1.1;
+}
+
+.clamp-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 1.2rem + 2vw, 3rem);
+  line-height: 1.2;
+}
+
+.clamp-subheading {
+  font-size: clamp(0.9rem, 0.85rem + 0.3vw, 1.1rem);
+}
+
+.clamp-kicker {
+  font-size: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
+}
+
+.clamp-body {
+  font-size: clamp(0.82rem, 0.78rem + 0.2vw, 0.95rem);
+}
+
+/* Hide scrollbars but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Scroll reveal helper classes */
+.reveal-anim {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-anim.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Form field entry animation */
+@keyframes formFieldIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-field {
+  animation: formFieldIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

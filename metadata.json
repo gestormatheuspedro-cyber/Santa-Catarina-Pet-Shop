@@ -1,0 +1,6 @@
+{
+  "name": "Santa Catarina Pet Shop",
+  "description": "Site oficial do Santa Catarina Pet Shop em Joinville - SC. Banho, tosa, consultório veterinário e atendimento humanizado.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
