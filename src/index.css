@@ -134,3 +134,13 @@ html {
 .animate-field {
   animation: formFieldIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Mobile video player controls optimization */
+video::-webkit-media-controls-enclosure {
+  border-radius: inherit;
+}
+
+video {
+  -webkit-tap-highlight-color: transparent;
+}
+

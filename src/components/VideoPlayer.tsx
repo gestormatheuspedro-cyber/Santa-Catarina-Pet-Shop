@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Play, ExternalLink } from "lucide-react";
+import { Play, RotateCcw } from "lucide-react";
 
 interface VideoPlayerProps {
   videoUrl: string;
@@ -20,19 +20,22 @@ function extractDriveId(url: string): string | null {
   return null;
 }
 
-function resolveVideoSources(url: string): { directUrls: string[]; embedUrl: string | null } {
+function resolveVideoSources(url: string): { directUrls: string[]; driveId: string | null; embedUrl: string | null } {
   const driveId = extractDriveId(url);
   if (driveId) {
     return {
       directUrls: [
+        `/api/video/${driveId}`,
         `https://drive.usercontent.google.com/download?id=${driveId}&export=download`,
         `https://drive.google.com/uc?export=download&id=${driveId}`,
       ],
+      driveId,
       embedUrl: `https://drive.google.com/file/d/${driveId}/preview`,
     };
   }
   return {
     directUrls: [url],
+    driveId: null,
     embedUrl: null,
   };
 }
@@ -48,14 +51,16 @@ export default function VideoPlayer({
   const [isPlaying, setIsPlaying] = useState(false);
   const [sourceIndex, setSourceIndex] = useState(0);
   const [useIframeFallback, setUseIframeFallback] = useState(false);
+  const [hasPermanentError, setHasPermanentError] = useState(false);
 
-  const { directUrls, embedUrl } = resolveVideoSources(videoUrl);
+  const { directUrls, driveId, embedUrl } = resolveVideoSources(videoUrl);
   const currentDirectUrl = directUrls[sourceIndex] || directUrls[0];
+  const effectivePosterUrl = posterUrl || (driveId ? `https://lh3.googleusercontent.com/d/${driveId}` : undefined);
 
   useEffect(() => {
-    // Reset state if videoUrl changes
     setSourceIndex(0);
     setUseIframeFallback(false);
+    setHasPermanentError(false);
     setIsPlaying(false);
   }, [videoUrl]);
 
@@ -64,17 +69,27 @@ export default function VideoPlayer({
       setSourceIndex((prev) => prev + 1);
     } else if (embedUrl) {
       setUseIframeFallback(true);
+    } else {
+      setHasPermanentError(true);
     }
   };
 
-  const handlePlayClick = (e: React.MouseEvent) => {
+  const handlePlayClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
     if (useIframeFallback) return;
     if (!videoRef.current) return;
 
+    if (hasPermanentError) {
+      setHasPermanentError(false);
+      setSourceIndex(0);
+      videoRef.current.load();
+    }
+
     videoRef.current
       .play()
-      .then(() => setIsPlaying(true))
+      .then(() => {
+        setIsPlaying(true);
+      })
       .catch(() => {
         if (videoRef.current) {
           videoRef.current.muted = true;
@@ -84,6 +99,8 @@ export default function VideoPlayer({
             .catch(() => {
               if (embedUrl) {
                 setUseIframeFallback(true);
+              } else {
+                setHasPermanentError(true);
               }
             });
         }
@@ -92,15 +109,19 @@ export default function VideoPlayer({
 
   return (
     <div
-      className={`relative w-full h-full overflow-hidden shadow-xl border border-border-light bg-black rounded-2xl group select-none ${
-        aspectRatio === "9:16" ? "aspect-[9/16]" : aspectRatio === "16:9" ? "aspect-video" : ""
+      className={`relative w-full mx-auto overflow-hidden shadow-2xl border border-border-light/40 bg-black rounded-2xl group select-none touch-manipulation ${
+        aspectRatio === "9:16"
+          ? "aspect-[9/16] max-h-[75vh] sm:max-h-[85vh]"
+          : aspectRatio === "16:9"
+          ? "aspect-video w-full"
+          : "w-full h-auto"
       }`}
     >
       {!useIframeFallback ? (
         <video
           ref={videoRef}
           src={currentDirectUrl}
-          poster={posterUrl}
+          poster={effectivePosterUrl}
           controls
           controlsList="nodownload"
           playsInline
@@ -109,57 +130,55 @@ export default function VideoPlayer({
           preload="metadata"
           aria-label={ariaLabel || title}
           onPlay={() => setIsPlaying(true)}
+          onPlaying={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}
+          onEnded={() => setIsPlaying(false)}
           onError={handleVideoError}
-          className="w-full h-full object-cover rounded-[inherit] block focus:outline-none"
+          className="w-full h-full object-cover rounded-[inherit] block focus:outline-none touch-auto"
           style={{
-            pointerEvents: "auto",
             width: "100%",
             height: "100%",
             objectFit: "cover",
+            display: "block",
           }}
         />
       ) : embedUrl ? (
-        /* Google Drive Embedded Player Fallback for static hosts */
         <iframe
           src={embedUrl}
           title={title}
-          allow="autoplay; fullscreen"
-          className="w-full h-full border-0 rounded-[inherit] bg-black"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
+          className="w-full h-full border-0 rounded-[inherit] bg-black block"
         />
-      ) : (
-        /* Poster Fallback if everything fails */
-        <div className="relative w-full h-full bg-slate-900 flex flex-col items-center justify-center p-4">
-          {posterUrl && (
-            <img src={posterUrl} alt={title} className="absolute inset-0 w-full h-full object-cover opacity-80" />
-          )}
-          <a
-            href={currentDirectUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative z-10 flex flex-col items-center gap-2 text-center text-white bg-black/80 backdrop-blur-md p-4 rounded-xl border border-white/20 hover:bg-black transition-colors"
-          >
-            <ExternalLink className="w-8 h-8 text-primary" />
-            <p className="text-xs font-semibold">{title}</p>
-            <p className="text-[11px] text-white/80">Clique para assistir o vídeo</p>
-          </a>
-        </div>
-      )}
+      ) : null}
 
-      {/* Play Button Overlay when video is paused (HTML5 video mode) */}
-      {!isPlaying && !useIframeFallback && (
+      {/* Center Play Overlay for HTML5 video */}
+      {!useIframeFallback && (
         <div
           onClick={handlePlayClick}
-          className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors cursor-pointer z-10"
+          className={`absolute inset-0 flex flex-col items-center justify-center bg-black/25 backdrop-blur-[1px] transition-all duration-300 z-10 ${
+            isPlaying ? "opacity-0 pointer-events-none invisible" : "opacity-100 pointer-events-auto cursor-pointer"
+          }`}
         >
-          <button
-            type="button"
-            onClick={handlePlayClick}
-            aria-label="Reproduzir vídeo"
-            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary hover:bg-primary-dark text-white flex items-center justify-center shadow-lg shadow-primary/40 transform group-hover:scale-110 active:scale-95 transition-all duration-300 focus:outline-none cursor-pointer"
-          >
-            <Play size={26} className="fill-current ml-1" />
-          </button>
+          {!hasPermanentError ? (
+            <button
+              type="button"
+              onClick={handlePlayClick}
+              aria-label="Reproduzir vídeo"
+              className="w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-primary hover:bg-primary-dark text-white flex items-center justify-center shadow-lg shadow-primary/40 transform active:scale-90 hover:scale-105 transition-all duration-300 focus:outline-none cursor-pointer"
+            >
+              <Play size={30} className="fill-current ml-1" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handlePlayClick}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-primary hover:bg-primary-dark text-white font-sans font-bold text-xs shadow-lg transition-all"
+            >
+              <RotateCcw size={16} />
+              <span>Tentar recarregar vídeo</span>
+            </button>
+          )}
         </div>
       )}
 
@@ -172,5 +191,6 @@ export default function VideoPlayer({
     </div>
   );
 }
+
 
 
