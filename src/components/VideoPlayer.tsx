@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { Play, AlertCircle } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Play, ExternalLink } from "lucide-react";
 
 interface VideoPlayerProps {
   videoUrl: string;
@@ -7,6 +7,34 @@ interface VideoPlayerProps {
   title: string;
   ariaLabel?: string;
   aspectRatio?: "9:16" | "16:9" | "auto";
+}
+
+function extractDriveId(url: string): string | null {
+  if (!url) return null;
+  if (url.startsWith("/api/video/")) {
+    return url.replace("/api/video/", "").split("?")[0];
+  }
+  const match = url.match(/id=([a-zA-Z0-9_-]+)/) || url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (match) return match[1];
+  if (/^[a-zA-Z0-9_-]{25,}$/.test(url)) return url;
+  return null;
+}
+
+function resolveVideoSources(url: string): { directUrls: string[]; embedUrl: string | null } {
+  const driveId = extractDriveId(url);
+  if (driveId) {
+    return {
+      directUrls: [
+        `https://drive.usercontent.google.com/download?id=${driveId}&export=download`,
+        `https://drive.google.com/uc?export=download&id=${driveId}`,
+      ],
+      embedUrl: `https://drive.google.com/file/d/${driveId}/preview`,
+    };
+  }
+  return {
+    directUrls: [url],
+    embedUrl: null,
+  };
 }
 
 export default function VideoPlayer({
@@ -18,11 +46,32 @@ export default function VideoPlayer({
 }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [sourceIndex, setSourceIndex] = useState(0);
+  const [useIframeFallback, setUseIframeFallback] = useState(false);
+
+  const { directUrls, embedUrl } = resolveVideoSources(videoUrl);
+  const currentDirectUrl = directUrls[sourceIndex] || directUrls[0];
+
+  useEffect(() => {
+    // Reset state if videoUrl changes
+    setSourceIndex(0);
+    setUseIframeFallback(false);
+    setIsPlaying(false);
+  }, [videoUrl]);
+
+  const handleVideoError = () => {
+    if (sourceIndex < directUrls.length - 1) {
+      setSourceIndex((prev) => prev + 1);
+    } else if (embedUrl) {
+      setUseIframeFallback(true);
+    }
+  };
 
   const handlePlayClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (useIframeFallback) return;
     if (!videoRef.current) return;
+
     videoRef.current
       .play()
       .then(() => setIsPlaying(true))
@@ -32,7 +81,11 @@ export default function VideoPlayer({
           videoRef.current
             .play()
             .then(() => setIsPlaying(true))
-            .catch(() => setHasError(true));
+            .catch(() => {
+              if (embedUrl) {
+                setUseIframeFallback(true);
+              }
+            });
         }
       });
   };
@@ -43,10 +96,10 @@ export default function VideoPlayer({
         aspectRatio === "9:16" ? "aspect-[9/16]" : aspectRatio === "16:9" ? "aspect-video" : ""
       }`}
     >
-      {!hasError ? (
+      {!useIframeFallback ? (
         <video
           ref={videoRef}
-          src={videoUrl}
+          src={currentDirectUrl}
           poster={posterUrl}
           controls
           controlsList="nodownload"
@@ -57,7 +110,7 @@ export default function VideoPlayer({
           aria-label={ariaLabel || title}
           onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}
-          onError={() => setHasError(true)}
+          onError={handleVideoError}
           className="w-full h-full object-cover rounded-[inherit] block focus:outline-none"
           style={{
             pointerEvents: "auto",
@@ -66,22 +119,35 @@ export default function VideoPlayer({
             objectFit: "cover",
           }}
         />
+      ) : embedUrl ? (
+        /* Google Drive Embedded Player Fallback for static hosts */
+        <iframe
+          src={embedUrl}
+          title={title}
+          allow="autoplay; fullscreen"
+          className="w-full h-full border-0 rounded-[inherit] bg-black"
+        />
       ) : (
-        /* Poster Fallback if video fails */
+        /* Poster Fallback if everything fails */
         <div className="relative w-full h-full bg-slate-900 flex flex-col items-center justify-center p-4">
           {posterUrl && (
             <img src={posterUrl} alt={title} className="absolute inset-0 w-full h-full object-cover opacity-80" />
           )}
-          <div className="relative z-10 flex flex-col items-center gap-2 text-center text-white bg-black/70 backdrop-blur-md p-4 rounded-xl border border-white/20">
-            <AlertCircle className="w-8 h-8 text-primary" />
+          <a
+            href={currentDirectUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative z-10 flex flex-col items-center gap-2 text-center text-white bg-black/80 backdrop-blur-md p-4 rounded-xl border border-white/20 hover:bg-black transition-colors"
+          >
+            <ExternalLink className="w-8 h-8 text-primary" />
             <p className="text-xs font-semibold">{title}</p>
-            <p className="text-[11px] text-white/70">Toque para reproduzir</p>
-          </div>
+            <p className="text-[11px] text-white/80">Clique para assistir o vídeo</p>
+          </a>
         </div>
       )}
 
-      {/* Play Button Overlay when video is paused */}
-      {!isPlaying && !hasError && (
+      {/* Play Button Overlay when video is paused (HTML5 video mode) */}
+      {!isPlaying && !useIframeFallback && (
         <div
           onClick={handlePlayClick}
           className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors cursor-pointer z-10"
@@ -90,7 +156,7 @@ export default function VideoPlayer({
             type="button"
             onClick={handlePlayClick}
             aria-label="Reproduzir vídeo"
-            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary hover:bg-primary-dark text-white flex items-center justify-center shadow-lg shadow-primary/40 transform group-hover:scale-110 active:scale-95 transition-all duration-300 focus:outline-none"
+            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary hover:bg-primary-dark text-white flex items-center justify-center shadow-lg shadow-primary/40 transform group-hover:scale-110 active:scale-95 transition-all duration-300 focus:outline-none cursor-pointer"
           >
             <Play size={26} className="fill-current ml-1" />
           </button>

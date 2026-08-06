@@ -34,7 +34,7 @@ export default function Hero({ onOpenMenu }: HeroProps) {
   const trustItems = [
     {
       icon: <Heart size={16} className="text-primary shrink-0" />,
-      text: "+4.500 Pets Atendidos",
+      text: "+ de 1000 Pets Atendidos",
     },
     {
       icon: <Star size={16} className="text-amber-400 fill-amber-400 shrink-0" />,
@@ -200,7 +200,7 @@ export default function Hero({ onOpenMenu }: HeroProps) {
               <Star size={13} fill="currentColor" />
             </span>
             <span className="text-[11px] sm:text-xs font-medium tracking-wide">
-              4,9 no Google <span className="text-white/80 font-bold">• +1.000 pets atendidos 🐾</span>
+              4,9 no Google <span className="text-white/80">• <strong className="text-amber-300 font-extrabold">+ de 1000</strong> pets atendidos 🐾</span>
             </span>
           </motion.div>
 

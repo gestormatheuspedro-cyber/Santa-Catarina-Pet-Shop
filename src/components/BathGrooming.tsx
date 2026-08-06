@@ -59,7 +59,7 @@ export default function BathGrooming() {
           <div className="lg:col-span-5 w-full flex justify-center">
             <div className="w-full max-w-[320px] sm:max-w-[360px] md:max-w-[400px] lg:max-w-none">
               <VideoPlayer
-                videoUrl="/api/video/1BVeZnUATXf7hUvyEkURRwRfrHrTkUKBy"
+                videoUrl="https://drive.usercontent.google.com/download?id=1BVeZnUATXf7hUvyEkURRwRfrHrTkUKBy&export=download"
                 posterUrl="https://lh3.googleusercontent.com/d/1BVeZnUATXf7hUvyEkURRwRfrHrTkUKBy"
                 title="Banho e Tosa"
                 ariaLabel="Vídeo do setor de Banho e Tosa do Santa Catarina Pet Shop"

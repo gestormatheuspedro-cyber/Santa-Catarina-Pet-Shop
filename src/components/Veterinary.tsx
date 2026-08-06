@@ -19,7 +19,7 @@ export default function Veterinary() {
           <div className="order-1 lg:order-2 lg:col-span-5 w-full flex justify-center">
             <div className="w-full max-w-[260px] sm:max-w-[300px] lg:max-w-[420px]">
               <VideoPlayer
-                videoUrl="/api/video/16pKNDgzYvL9rwIZqtWFvxCFOPTxnTVKj"
+                videoUrl="https://drive.usercontent.google.com/download?id=16pKNDgzYvL9rwIZqtWFvxCFOPTxnTVKj&export=download"
                 posterUrl="https://lh3.googleusercontent.com/d/16pKNDgzYvL9rwIZqtWFvxCFOPTxnTVKj"
                 title="Dra. Karina Krüger"
                 ariaLabel="Vídeo do atendimento veterinário com a Dra. Karina Krüger no Santa Catarina Pet Shop"
