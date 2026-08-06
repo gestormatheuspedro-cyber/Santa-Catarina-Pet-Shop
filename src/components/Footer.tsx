@@ -18,11 +18,11 @@ export default function Footer() {
           {/* Column 1: Brand details (1.8fr equivalent) */}
           <div className="lg:col-span-5 flex flex-col items-start gap-4">
             <a href="#top" className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10 bg-white shrink-0">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-primary/30 bg-white shrink-0 shadow-md">
                 <img
                   src="https://lh3.googleusercontent.com/d/144xPtER3_e8_QasjfEGHWigV-BWs9XxU"
                   alt="Logo Santa Catarina Pet Shop"
-                  className="w-full h-full object-contain p-0.5"
+                  className="w-full h-full object-cover object-center scale-110"
                   referrerPolicy="no-referrer"
                 />
               </div>

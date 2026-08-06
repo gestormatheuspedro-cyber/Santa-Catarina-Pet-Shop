@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { X, Calendar, MessageCircle } from "lucide-react";
+import { X, MessageCircle, PawPrint } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import realDogImg from "../assets/images/real_groomed_dog_avatar_1784850629909.jpg";
 
 export default function WhatsappFloat() {
   const [isVisible, setIsVisible] = useState(false);
@@ -9,112 +8,110 @@ export default function WhatsappFloat() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 200) {
+      if (window.scrollY > 150) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const whatsappUrl =
+    "https://wa.me/5547984614756?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20servi%C3%A7o%20para%20meu%20pet.";
+
   return (
     <AnimatePresence>
       {isVisible && (
-        <div className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3 select-none pointer-events-none">
-          {/* Animated Call-to-Action Message Bubble */}
+        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-2.5 select-none pointer-events-none">
+          {/* Single Phrase Compact Message Bubble */}
           <AnimatePresence>
             {showBubble && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                transition={{ type: "spring", stiffness: 260, damping: 22 }}
-                className="pointer-events-auto relative bg-white border border-primary/20 text-text-base rounded-2xl p-3.5 sm:p-4 shadow-xl max-w-[260px] sm:max-w-[290px] mr-1"
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                className="pointer-events-auto relative bg-white border border-slate-200 text-slate-800 rounded-2xl px-3.5 py-2.5 shadow-xl max-w-[240px] sm:max-w-[270px] mr-1"
               >
-                {/* Close speech bubble button */}
+                {/* Close button */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowBubble(false);
                   }}
-                  className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-text-base text-white flex items-center justify-center hover:bg-primary transition-colors focus:outline-none shadow-md z-10"
+                  className="absolute -top-2 -left-2 w-5 h-5 rounded-full bg-slate-700 hover:bg-slate-900 text-white flex items-center justify-center transition-colors focus:outline-none shadow-md z-20 cursor-pointer"
                   aria-label="Fechar mensagem"
                 >
-                  <X size={12} />
+                  <X size={11} />
                 </button>
 
-                {/* Speech bubble tail pointing to the dog */}
-                <div className="absolute -bottom-2 right-7 sm:right-9 w-4 h-4 bg-white border-r border-b border-primary/20 rotate-45" />
+                {/* Speech bubble tail */}
+                <div className="absolute -bottom-1.5 right-6 sm:right-7 w-3 h-3 bg-white border-r border-b border-slate-200 rotate-45" />
 
-                {/* Content Link */}
+                {/* Compact Single Phrase Link */}
                 <a
-                  href="https://wa.me/5547984614756?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20servi%C3%A7o%20para%20meu%20pet."
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col gap-1.5 group"
+                  className="flex items-center gap-2 group cursor-pointer"
                 >
-                  <div className="flex items-center gap-1.5 text-[11px] font-extrabold text-primary uppercase tracking-wider">
-                    <Calendar size={13} className="animate-pulse" />
-                    <span>Agendamento Rápido</span>
-                  </div>
-                  <p className="text-xs sm:text-sm font-semibold text-text-base leading-tight group-hover:text-primary transition-colors">
-                    🐾 Agende o banho ou consulta do seu pet direto pelo WhatsApp!
+                  <p className="text-xs font-semibold text-slate-800 group-hover:text-primary transition-colors leading-tight">
+                    🐾 Agende o banho ou consulta do seu pet pelo WhatsApp! ✨
                   </p>
-                  <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-white bg-[#25D366] px-3.5 py-1.5 rounded-full w-fit mt-1 shadow-sm group-hover:bg-[#20bd5a] transition-colors">
-                    <MessageCircle size={13} className="fill-current" />
-                    <span>Conversar no WhatsApp</span>
-                  </div>
                 </a>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Floating Mascot & WhatsApp Button */}
+          {/* Floating Paw + WhatsApp Trigger Button */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 15 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1, 
-              y: [0, -6, 0]
-            }}
-            exit={{ opacity: 0, scale: 0.8, y: 15 }}
-            transition={{ 
-              y: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
-              opacity: { duration: 0.3 },
-              scale: { type: "spring", damping: 18 }
-            }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ type: "spring", damping: 18 }}
             className="pointer-events-auto relative group"
           >
+            {/* Pulsing Orange Ripple Rings */}
+            <span className="absolute inset-0 rounded-full bg-orange-500 opacity-40 animate-ping pointer-events-none" />
+            <span className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-orange-500 via-amber-500 to-primary opacity-40 blur-md group-hover:opacity-75 transition-opacity pointer-events-none" />
+
             <a
-              href="https://wa.me/5547984614756?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20servi%C3%A7o%20para%20meu%20pet."
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Agendar atendimento no WhatsApp do Santa Catarina Pet Shop"
-              className="relative flex items-center justify-center w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-white p-1 border-2 border-primary shadow-lg transition-transform duration-300 hover:scale-108 active:scale-95"
+              className="relative flex items-center justify-center w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-br from-orange-500 via-amber-600 to-primary text-white shadow-xl shadow-orange-500/40 border-2 border-white transition-all duration-300 hover:scale-110 active:scale-95 group cursor-pointer"
             >
-              {/* Inner Circle Avatar */}
-              <div className="w-full h-full rounded-full overflow-hidden bg-primary-50 relative flex items-center justify-center">
-                <img
-                  src={realDogImg}
-                  alt="Atendimento Santa Catarina Pet Shop"
-                  className="w-full h-full object-cover rounded-full"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
+              {/* Animated Paw Icon */}
+              <motion.div
+                animate={{
+                  rotate: [0, -12, 12, -8, 8, 0],
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  repeatDelay: 3,
+                  ease: "easeInOut",
+                }}
+                className="flex items-center justify-center"
+              >
+                <PawPrint className="w-8 h-8 sm:w-9 sm:h-9 text-white fill-white/20 transform -rotate-12" />
+              </motion.div>
 
-              {/* Paw Badge at Top Right */}
-              <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs shadow-md border-2 border-white">
-                🐾
-              </div>
-
-              {/* WhatsApp Green Badge Indicator at Bottom Right */}
-              <div className="absolute -bottom-1 -right-1 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-md border-2 border-white group-hover:scale-110 transition-transform">
+              {/* Small Green WhatsApp Indicator Badge */}
+              <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-md border-2 border-white">
                 <MessageCircle size={15} className="fill-current text-white" />
+              </div>
+
+              {/* Notification Badge */}
+              <div className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-extrabold border-2 border-white shadow-sm animate-pulse">
+                1
               </div>
             </a>
           </motion.div>
@@ -123,5 +120,6 @@ export default function WhatsappFloat() {
     </AnimatePresence>
   );
 }
+
 
 

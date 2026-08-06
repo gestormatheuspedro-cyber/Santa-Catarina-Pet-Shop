@@ -26,7 +26,7 @@ export default function BathGrooming() {
             </h2>
             
             <p className="font-sans text-xs sm:text-sm text-text-secondary leading-relaxed mb-6 font-light">
-              Acreditamos que a confiança é a base de tudo. Por isso, nossa área de banho e tosa é totalmente cercada por paredes de vidro transparente. Você pode acompanhar de perto todo o atendimento, vendo com seus próprios olhos o amor, carinho e paciência que nossa equipe dedicada entrega ao seu pet.
+              Acreditamos que a confiança é a base de tudo. Por isso, nossa área de banho e tosa é totalmente cercada por <span className="text-primary font-bold">paredes de vidro transparente</span>. Você pode acompanhar de perto todo o atendimento, vendo com seus próprios olhos o <span className="text-primary font-semibold">amor, carinho e paciência</span> que nossa <span className="text-primary font-semibold">equipe dedicada</span> entrega ao seu pet.
             </p>
 
             {/* Features list grid (1 col mobile -> 2 cols desktop) */}

@@ -41,7 +41,7 @@ export default function Location() {
             </h2>
             
             <p className="font-sans text-xs sm:text-sm text-text-secondary leading-relaxed mb-8 font-light">
-              Ficamos localizados no bairro Floresta, em uma área de fácil acesso com estacionamento próprio na Rua Santa Catarina. Venha conhecer nosso espaço de perto, bater um papo com a Dra. Karina e ver a transparência do nosso banho e tosa!
+              Ficamos localizados no <span className="text-primary font-bold">bairro Floresta</span>, em uma área de fácil acesso com <span className="text-primary font-bold">estacionamento próprio</span> na Rua Santa Catarina. Venha conhecer nosso espaço de perto, bater um papo com a <span className="text-primary font-bold">Dra. Karina</span> e ver a <span className="text-primary font-bold">transparência do nosso banho e tosa</span>!
             </p>
 
             {/* List of Contact Items */}

@@ -40,7 +40,7 @@ export default function Veterinary() {
             </h2>
             
             <p className="font-sans text-xs sm:text-sm text-text-secondary leading-relaxed mb-6 font-light">
-              Ter um médico veterinário por perto faz toda a diferença para o bem-estar do seu pet. Aqui no Santa Catarina Pet Shop, a Dra. Karina Krüger está presente diariamente para realizar consultas clínicas, vacinação preventiva de alta qualidade e dar as melhores orientações nutricionais. Garantimos um atendimento humanizado e um acompanhamento contínuo da saúde física e emocional do seu melhor amigo.
+              Ter um médico veterinário por perto faz toda a diferença para o bem-estar do seu pet. Aqui no Santa Catarina Pet Shop, a <span className="text-primary font-bold">Dra. Karina Krüger</span> está presente diariamente para realizar <span className="text-primary font-semibold">consultas clínicas</span>, <span className="text-primary font-semibold">vacinação preventiva</span> de alta qualidade e dar as melhores <span className="text-primary font-semibold">orientações nutricionais</span>. Garantimos um atendimento humanizado e um acompanhamento contínuo da saúde física e emocional do seu melhor amigo.
             </p>
 
             {/* 4 Features List */}

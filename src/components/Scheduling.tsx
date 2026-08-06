@@ -77,7 +77,7 @@ ${formData.observations ? `- Observações: ${formData.observations}` : ""}`;
               Agende o horário do <em className="italic text-primary">seu melhor amigo</em>
             </h2>
             <p className="font-sans text-xs sm:text-sm text-text-secondary leading-relaxed mb-8">
-              Preencha os dados abaixo para solicitar o agendamento de banho, tosa ou consulta. Suas informações serão organizadas em uma mensagem automática para confirmarmos o atendimento pelo WhatsApp na hora!
+              Preencha os dados abaixo para solicitar o agendamento de <span className="text-primary font-bold">banho</span>, <span className="text-primary font-bold">tosa</span> ou <span className="text-primary font-bold">consulta veterinária</span>. Suas informações serão organizadas em uma mensagem automática para confirmarmos o atendimento pelo <span className="text-emerald-600 font-bold">WhatsApp</span> na hora!
             </p>
 
             {/* Quick Contact Indicators */}

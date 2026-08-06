@@ -22,7 +22,7 @@ export default function InstagramFeed() {
             Siga nossa rotina no Instagram
           </h2>
           <p className="font-sans text-xs text-text-secondary leading-relaxed">
-            Acompanhe o dia a dia mais fofo do Floresta! Postamos fotos dos nossos amiguinhos, dicas de cuidados e novidades da loja.
+            Acompanhe o dia a dia mais fofo do <span className="text-primary font-bold">bairro Floresta</span>! Postamos <span className="text-primary font-semibold">fotos dos nossos amiguinhos</span>, <span className="text-primary font-semibold">dicas de cuidados</span> e novidades da loja.
           </p>
         </div>
 

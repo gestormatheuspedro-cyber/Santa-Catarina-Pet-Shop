@@ -43,11 +43,11 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
               {/* Top Row: Brand & Close */}
               <div className="flex items-center justify-between border-b border-white/10 pb-5 mb-6">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-full overflow-hidden border border-white/10 bg-white shrink-0">
+                  <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-primary/30 bg-white shrink-0 shadow-sm">
                     <img
                       src="https://lh3.googleusercontent.com/d/144xPtER3_e8_QasjfEGHWigV-BWs9XxU"
                       alt="Logo Santa Catarina Pet Shop"
-                      className="w-full h-full object-contain p-0.5"
+                      className="w-full h-full object-cover object-center scale-110"
                       referrerPolicy="no-referrer"
                     />
                   </div>
