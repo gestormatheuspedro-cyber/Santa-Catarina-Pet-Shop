@@ -190,7 +190,7 @@ export default function Hero({ onOpenMenu }: HeroProps) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-4 sm:mb-5 inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white text-xs font-semibold shadow-sm"
+            className="hidden sm:inline-flex mb-4 sm:mb-5 items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white text-xs font-semibold shadow-sm"
           >
             <span className="flex text-amber-400 gap-0.5">
               <Star size={13} fill="currentColor" />
